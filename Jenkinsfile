@@ -31,10 +31,11 @@ pipeline {
       }
       stage('SonarQube - SAST') {
             steps {
+            withSonarQubeEnv('SonarQube'){
               sh "mvn clean verify sonar:sonar \
                     -Dsonar.projectKey=devsecops-numeric-application \
-                    -Dsonar.host.url=http://devsecops-demo.southindia.cloudapp.azure.com:9000 \
-                    -Dsonar.login=sqp_ce14eeaaeac98f61beb4c595ca87bdfb639a9a7f"
+                    -Dsonar.host.url=http://devsecops-demo.southindia.cloudapp.azure.com:9000"// \
+                    //-Dsonar.login=sqp_ce14eeaaeac98f61beb4c595ca87bdfb639a9a7f"
 
                 timeout(time: 2, unit: 'MINUTES'){
                     script {
@@ -42,6 +43,7 @@ pipeline {
                     }
                 }
               }
+            }
           }
       stage('Docker Build and Push') {
             steps {

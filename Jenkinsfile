@@ -35,12 +35,13 @@ pipeline {
                     -Dsonar.projectKey=devsecops-numeric-application \
                     -Dsonar.host.url=http://devsecops-demo.southindia.cloudapp.azure.com:9000 \
                     -Dsonar.login=sqp_ce14eeaaeac98f61beb4c595ca87bdfb639a9a7f"
-            }
-            timeout(time: 2, unit: 'MINUTES'){
-            script {
-                waitForQualityGate abortPipeline: true
-            }
-            }
+
+                timeout(time: 2, unit: 'MINUTES'){
+                    script {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+              }
           }
       stage('Docker Build and Push') {
             steps {

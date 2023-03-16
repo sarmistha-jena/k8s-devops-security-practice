@@ -18,11 +18,6 @@ pipeline {
               sh "mvn org.pitest:pitest-maven:mutationCoverage"
             }
       }
-      stage('Vulnerability Scan - Docker ') {
-            steps {
-              sh "mvn dependency-check:check"
-            }
-      }
       /* stage('SonarQube - SAST') {
             steps {
                 withSonarQubeEnv('SonarQube'){
@@ -38,6 +33,18 @@ pipeline {
                 }
             }
           } */
+          stage('Vulnerability Scan - Docker') {
+                steps {
+                  parallel(
+                    "Dependency Scan": {
+                      sh "mvn dependency-check:check"
+                    },
+                    "Trivy Scan": {
+                      sh "bash trivy-docker-image-scan.sh"
+                    }
+                  )
+                }
+              }
       stage('Docker Build and Push') {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]){
@@ -57,13 +64,13 @@ pipeline {
               }
             }
       }
-      post {
-        always{
-            junit 'target/surefire-reports/*.xml'
-            jacoco execPattern: 'target/jacoco.exec'
-            pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
-            dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-        }
-      }
   }
+   post {
+          always{
+              junit 'target/surefire-reports/*.xml'
+              jacoco execPattern: 'target/jacoco.exec'
+              pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+              dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+          }
+   }
 }

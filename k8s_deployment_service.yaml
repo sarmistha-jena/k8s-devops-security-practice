@@ -16,20 +16,19 @@ spec:
         app: devsecops
     spec:
       volumes:
-        - name: vol
-          emptyDir: {}
+      - name: vol
+        emptyDir: {}
       serviceAccountName: default
       containers:
-        - image: replace
-          name: devsecops-container
-          volumeMounts:
-            - mountPath: /tmp
-              name: vol
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 100
-            readOnlyRootFileSystem: true
-
+      - image: replace
+        name: devsecops-container
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 100
+          readOnlyRootFileSystem: true
+        volumeMounts:
+        - mountPath: /tmp
+          name: vol
 ---
 apiVersion: v1
 kind: Service
@@ -39,9 +38,9 @@ metadata:
   name: devsecops-svc
 spec:
   ports:
-    - port: 8080
-      protocol: TCP
-      targetPort: 8080
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
   selector:
     app: devsecops
   type: NodePort

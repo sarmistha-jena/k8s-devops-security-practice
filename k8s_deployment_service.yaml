@@ -22,13 +22,14 @@ spec:
       containers:
       - image: replace
         name: devsecops-container
+        volumeMounts:
+        - mountPath: /tmp
+          name: vol
         securityContext:
           runAsNonRoot: true
           runAsUser: 100
           readOnlyRootFileSystem: true
-        volumeMounts:
-        - mountPath: /tmp
-          name: vol
+
 ---
 apiVersion: v1
 kind: Service

@@ -86,7 +86,7 @@ pipeline {
                     withKubeConfig([credentialsId: "kubeconfig"]){
                   /* sh "sed -i 's#replace#sarmisthajena/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
                   sh "kubectl apply -f k8s_deployment_service.yaml" */
-                  sh "bash k8s_deployment_service.sh"
+                  sh "bash k8s-deployment.sh"
                   }
                 },
                 "Rollout Status":{

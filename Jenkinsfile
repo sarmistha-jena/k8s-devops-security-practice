@@ -94,6 +94,7 @@ pipeline {
                   sh "bash k8s-deployment-rollout-status.sh"
                   }
                 }
+                )
             }
       }
   }
